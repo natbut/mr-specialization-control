@@ -8,7 +8,7 @@ mlp_activation_kwargs: null
 mlp_norm_class: null
 mlp_norm_kwargs: null
 
-cnn_num_cells: [8, 8, 16] # 3 layers, X channels each
+cnn_num_cells: [8, 8, 8] # 3 layers, X channels each
 cnn_kernel_sizes: [3, 3, 3]
 cnn_strides: [2, 2, 1]
 cnn_paddings: [1, 1, 1]
