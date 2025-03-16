@@ -28,23 +28,23 @@ if typing.TYPE_CHECKING:
 class Scenario(BaseScenario):
     def make_world(self, batch_dim: int, device: torch.device, **kwargs):
         self.use_mothership = kwargs.pop("use_mothership", False)
-        self.n_agents = kwargs.pop("n_agents", 1)
+        self.n_agents = kwargs.pop("n_agents", 3)
         if self.use_mothership: # mothership adds extra agent
             self.n_agents += 1
-        self.n_targets = kwargs.pop("n_targets", 1)
-        self.n_obstacles = kwargs.pop("n_obstacles", 1)
+        self.n_targets = kwargs.pop("n_targets", 10)
+        self.n_obstacles = kwargs.pop("n_obstacles", 10)
         self.x_semidim = kwargs.pop("x_semidim", 1)
         self.y_semidim = kwargs.pop("y_semidim", 1)
         self._min_dist_between_entities = kwargs.pop("min_dist_between_entities", 0.25)
         self._covering_range = kwargs.pop("covering_range", 0.15)
 
-        self.use_gnn = kwargs.pop("use_gnn", True)
-        self.use_camera = kwargs.pop("use_camera", False)
+        self.use_gnn = kwargs.pop("use_gnn", False)
+        self.use_camera = kwargs.pop("use_camera", True)
         self.use_target_lidar = kwargs.pop("use_target_lidar", False)
         self.use_agent_lidar = kwargs.pop("use_agent_lidar", False)
         self.use_obstacle_lidar = kwargs.pop("use_obstacle_lidar", False)
-        self.frame_x_dim = kwargs.pop("frame_x_dim", 5.0)
-        self.frame_y_dim = kwargs.pop("frame_y_dim", 5.0)
+        self.frame_x_dim = kwargs.pop("frame_x_dim", 2.0)
+        self.frame_y_dim = kwargs.pop("frame_y_dim", 2.0)
         self._lidar_range = kwargs.pop("lidar_range", 0.25)
         self.n_lidar_rays = kwargs.pop("n_lidar_rays", 32)
 
@@ -118,6 +118,7 @@ class Scenario(BaseScenario):
                             world,
                             frame_x_dim=self.frame_x_dim,
                             frame_y_dim=self.frame_y_dim,
+                            center=None
                             )
                         ]
                         if self.use_camera
@@ -464,7 +465,7 @@ class Scenario(BaseScenario):
         else:
             # passenger obs (local lidar scans + mothership guidance)
             if self.use_camera:
-                obs["camera"] = agent.sensors[0].measure() / 255
+                obs["camera"] = agent.sensors[0].measure(agent.state.pos) / 255
             if self.use_target_lidar:
                 obs["target_lidar"] = agent.sensors[1].measure()
             if self.use_agent_lidar:
