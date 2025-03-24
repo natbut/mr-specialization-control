@@ -466,6 +466,7 @@ class Scenario(BaseScenario):
             # passenger obs (local lidar scans + mothership guidance)
             if self.use_camera:
                 obs["camera"] = agent.sensors[0].measure(agent.state.pos) / 255
+                agent.sensors[0].save_image(f"{agent.name}_img")
             if self.use_target_lidar:
                 obs["target_lidar"] = agent.sensors[1].measure()
             if self.use_agent_lidar:

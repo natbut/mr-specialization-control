@@ -41,7 +41,7 @@ class TopDownCamera(Sensor):
         self.frame_x_dim = frame_x_dim
         self.frame_y_dim = frame_y_dim
         self.resolution = resolution
-        self.center = center  # Defaults to agent position if None
+        self.center = center  # Defaults to world center if None
         self.render_color = render_color
         self.alpha = alpha
         self.entity_filter = entity_filter
@@ -50,12 +50,12 @@ class TopDownCamera(Sensor):
             self.center = torch.zeros((world.batch_dim, 2), device=world.device)
 
         self.viewer= rendering.Viewer(self.resolution[0], self.resolution[1], visible=False)
-        print("!! Initialized viewer")
 
         self._last_image = self._produce_image()
 
     def _produce_image(self):
         views = []
+
         for env in range(self._world.batch_dim):
             c_x, c_y = self.center[env]
 
@@ -101,8 +101,6 @@ class TopDownCamera(Sensor):
 
         self._last_image = self._produce_image()
 
-        # self.save_image("test_img.png")
-
         return self._last_image
 
     def save_image(self, filename: str):
@@ -112,7 +110,7 @@ class TopDownCamera(Sensor):
 
         for i, im_arr in enumerate(self._last_image):
             image = Image.fromarray(np.uint8(im_arr))  # Convert NumPy array to an image
-            image.save(filename)
+            image.save(filename+str(i)+".png")
             print(f"Top-down view saved to {filename}")
 
     def render(self, env_index: int = 0) -> "List[Geom]":

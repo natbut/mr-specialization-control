@@ -4,13 +4,13 @@ defaults:
   - vmas_discovery_config_custom
   - _self_
 
-max_steps: 50
+max_steps: 100
 
 # INSTANCE
 use_mothership: False
 targets_respawn: True
 n_agents: 3 # does not include mothership
-n_targets: 10
+n_targets: 3
 n_obstacles: 10
 covering_range: 0.15
 agents_per_target: 1

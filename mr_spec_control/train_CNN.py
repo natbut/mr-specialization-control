@@ -74,18 +74,17 @@ if __name__ == "__main__":
 
     experiment_config.on_policy_collected_frames_per_batch = 1_024 # Number of frames collected each iteration (max_steps from config * n_envs_per_worker)
     experiment_config.on_policy_n_envs_per_worker = 16 # Number of vmas vectorized enviornemnts (each will collect up to max_steps steps, see max_steps in task_config -> 50 * max_steps = 5_000 the number above)
-    experiment_config.on_policy_n_minibatch_iters = 3 #45
+    experiment_config.on_policy_n_minibatch_iters = 32 #45
     experiment_config.on_policy_minibatch_size = 128 # 400 NOTE try 128?
 
     experiment_config.keep_checkpoints_num = None
     experiment_config.save_folder = "runs" # Folder where the experiment will be saved
-    experiment_config.checkpoint_interval = 1024
+    experiment_config.checkpoint_interval = 10*experiment_config.on_policy_collected_frames_per_batch
 
     experiment_config.evaluation = True
-    experiment_config.render = False
+    experiment_config.render = True
     experiment_config.share_policy_params = True # Policy parameter sharing
     experiment_config.evaluation_interval = 5*experiment_config.on_policy_collected_frames_per_batch
-    # experiment_config.evaluation_interval = 12_000 # Interval in terms of frames, will evaluate every eval_interval/frames_per_batch = 5 iterations
     experiment_config.evaluation_episodes = 10 # Number of vmas vectorized enviornemnts used in evaluation
 
     experiment_config.loggers = ["wandb"] # Log to csv, usually you should use wandb
